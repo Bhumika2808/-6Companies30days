@@ -1,0 +1,30 @@
+class Solution {
+public:
+
+/*
+
+So basically, if x1>=xc, then nearest point is x1
+if x2<=xc then nearest point is x2
+if in between, then nearest point is xc itself. On this assumption we can analyze for y as well.
+
+Now if we find out distance between center of circle and this nearest point, then we can say true is this distance is <= radius. Else it is false.
+*/
+    bool checkOverlap(int radius, int xCenter, int yCenter, int x1, int y1, int x2, int y2) {
+        int cx = 0; //closest x coorinate
+        int cy = 0; //closest y coordinate
+
+        if(xCenter >= x2) cx = x2;
+        else if(xCenter<=x1) cx =x1;
+        else cx = xCenter;
+        
+        if(yCenter >= y2) cy = y2;
+        else if(yCenter <= y1) cy =y1;
+        else cy = yCenter;
+        
+        float dx = cx - xCenter;
+        float dy =cy - yCenter;
+
+        if ((dx * dx) + (dy*dy) <= radius*radius) return true;
+        return false;
+    }
+};
