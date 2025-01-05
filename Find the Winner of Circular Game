@@ -1,0 +1,13 @@
+class Solution {
+
+public: //TC = O(n) similar to josephus problem
+    int findSurvivor(int n,int k) {
+        if(n==1) return 0;
+        return (findSurvivor(n-1,k)+k)%n; 
+    }
+    int findTheWinner(int n, int k) {
+        return findSurvivor(n,k)+1; //because of 1 based indexing
+    }
+};
+//doing +k because for every increment of n we cancel out +1 k than previous nth friends(draw diag and observe)
+//similar to josephus problem
