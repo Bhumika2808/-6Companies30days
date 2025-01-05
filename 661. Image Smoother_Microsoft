@@ -1,0 +1,40 @@
+class Solution {
+public:
+//as values can range from 0 to 255 that means only right most bits will be used
+// to store given matrix value (all 8 bits as 1 == 255 value)
+//so we can store our resultant matrix value in second last byte(8 bits) for each cell so SC = O(1)
+    int dx[8]={-1,-1,-1,1,1,1,0,0};
+    int dy[8]={0,1,-1,0,1,-1,-1,1};
+    
+    int smoother(vector<vector<int>>& img, int i,int j,int n,int m) {
+        int sum=img[i][j]; 
+        int count =1;
+
+        for(int k=0;k<8;k++) {
+           int x = dx[k]+i;
+           int y= dy[k]+j;
+
+           if(x>=0 && x<n && y>=0 && y<m) {
+            sum+=(img[x][y] & 255); //so that only last byte value get added because 2nd last byte mp have processed res if that cell already executed
+            count++;
+           }
+        }
+        return sum/count;
+    }
+    vector<vector<int>> imageSmoother(vector<vector<int>>& img) {
+        int n = img.size();
+        int m = img[0].size();
+
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<m;j++) {
+                img[i][j]|=smoother(img,i,j,n,m)<<8; //tore res value in 2nd last byte 
+            }
+        }
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<m;j++) {
+                img[i][j]=img[i][j]>>8; //tore res value in 2nd last byte 
+            }
+        }
+        return img;
+    }
+};
