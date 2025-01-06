@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int minMoves2(vector<int>& nums) {
+        //main goal is how to handle negative numbers while finding avg
+        //by sorting the arr and taking mid element as the number to which we have to make all numbers equal because sum wont work in given constraints
+        sort(nums.begin(),nums.end());
+        int n = nums.size();
+        int mid = (n)/2; //mid consider as idx;
+       
+        int moves =0;
+        for(int i=0;i<n;i++) {
+            if(i!=mid) {
+                moves+=abs(nums[i]-nums[mid]);
+            }
+        }
+        return moves;
+    }
+};
