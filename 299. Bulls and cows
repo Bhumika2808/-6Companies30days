@@ -1,0 +1,33 @@
+class Solution {
+public:
+    string getHint(string secret, string guess) {
+        unordered_map<char,int>smp; //store character
+        string str = "";
+        int bulls=0;
+        int cows=0;
+
+        for(int i=0;i<secret.size();i++) {
+            if(secret[i] == guess[i]){
+                bulls++;
+            }
+            else{ //put all the non used guessed string into str and add non matched secret char to map
+                str+=guess[i];
+                smp[secret[i]]++;
+            }
+        }
+        
+        for(auto ch: str) {
+            if(smp.find(ch)!=smp.end()) { //if found non-matched char in guessed non used string we can rearrange it
+                cows++;
+                smp[ch]--;
+                if(smp[ch]==0) smp.erase(ch);
+            }
+        }
+        string res = "";
+        res+= to_string(bulls);
+        res+='A';
+        res+= to_string(cows);
+        res+='B';
+        return res;
+    }
+};
