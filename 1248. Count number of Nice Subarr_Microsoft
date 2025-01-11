@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int numberOfSubarrays(vector<int>& nums, int k) {
+        int i=0;
+        int count=0;
+        int lastPoppedOddIdx = -1;
+        int gap =0; //store gap between start of odd idx to first even digit for curr subarray
+        queue<int>q; //store idx of odd digits
+
+        while(i<nums.size()){
+            if(nums[i]%2) {
+                q.push(i);
+            }
+            if(q.size()>k) { //odd idx queue
+                lastPoppedOddIdx = q.front();
+                q.pop();
+            }
+            if(q.size()==k) {
+                gap = q.front()-lastPoppedOddIdx; //if lasPoppedIdx = -1 nd q.front = 3 then gap = 4 => (3-(-1))
+                count+=gap;
+            }
+            
+            i++; 
+        }
+    
+        return count;
+    }
+};
+
+//formula basically derive (no. of even nums before first odd value in curr sub array +1) * (no. of even nums after last odd value in curr sub array +1)
