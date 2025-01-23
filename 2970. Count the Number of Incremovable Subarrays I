@@ -1,0 +1,60 @@
+class Solution {
+public:
+   //So instead of saying how many subarrays we have to remove , I will find how many valid array I can Make -
+   //explanation link: https://leetcode.com/problems/count-the-number-of-incremovable-subarrays-ii/solutions/4447351/c-two-pointer-o-n-detailed-explanation/
+    
+    //basically the number of increasing subarrays i can make == no. of subarrays i remove so it is easy to find total increasing subarrays that why we go with this approach 
+   
+    long long countSortedArrays(vector<int>&a1, vector<int>&a2) {
+           int n1=a1.size();
+           int n2=a2.size();
+            
+           long long res = 0,i=0,j=0;
+
+           while(i<n1 && j<n2) {
+            // If arr1[i] is less than arr2[j], you can form sorted arrays with arr1[0..i] and arr2[j..n2-1]
+            if(a1[i]<a2[j]) {
+                 res+=n2-j;
+                 i++;
+              }else {
+                j++;
+              }
+           }
+           return res;
+    }
+
+    long long incremovableSubarrayCount(vector<int>& nums) {
+         vector<int>arr1,arr2;
+         int n=nums.size();
+         int i=0,j=n-1;
+         
+         if(n==1) return 1; //edge case
+
+        while(i<n-1 && nums[i]<nums[i+1]){
+            arr1.push_back(nums[i]);
+            i++;
+        }
+        arr1.push_back(nums[i]);
+
+        while(j>0 && nums[j]>nums[j-1]) {
+            arr2.push_back(nums[j]);
+            j--;
+        }
+        arr2.push_back(nums[j]);
+
+        reverse(arr2.begin(),arr2.end());
+        if(j<i) {
+            return (long long)n*(n+1)/2;
+        }
+
+        long long ans =0;
+        ans+=arr1.size();
+        ans+=arr2.size();
+
+        ans+=countSortedArrays(arr1,arr2);
+        ans++; //for empty array
+
+        return ans;
+         
+    }
+};
