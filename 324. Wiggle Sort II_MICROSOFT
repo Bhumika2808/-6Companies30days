@@ -1,0 +1,36 @@
+class Solution {
+public:
+    void wiggleSort(vector<int>& nums) {
+        //counting sort
+        
+        int mxele = *max_element(nums.begin(),nums.end());
+        vector<int>sortedArr(mxele+1);
+
+        //using counting sort algo and store freq for each element in array
+        for(int i=0;i<nums.size();i++){
+           sortedArr[nums[i]]++;
+        }
+        
+        //first put all the elements at odd index in descending order then at even idx
+
+        int j= mxele;
+        for(int i=1;i<nums.size();i+=2) {
+            while(sortedArr[j]==0) j--;
+            nums[i]=j;
+            sortedArr[j]--;
+        }
+
+        for(int i=0;i<nums.size();i+=2) {
+            while(sortedArr[j]==0) j--;
+            nums[i]=j;
+            sortedArr[j]--;
+        }
+ 
+    }
+};
+
+/*
+Time Complexity: The approach runs in (O(N + M)) time, where (N) is the number of
+ elements in nums and (M) is the maximum element value in nums.
+Space Complexity: The space complexity is O(Maxx) which can be maximum of 50001 
+as 0 <= nums[i] <= 5000 so basically its O(1).*/
