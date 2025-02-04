@@ -1,0 +1,60 @@
+/*
+  approach -1 call dijkstra from each source and store it in map<char, vector<long long>>
+  i.e for each source we will calculate shorted path to all nodes in the graph
+
+  approach -2 call dj only for unique pairs 
+
+  T.C = O(m+n) check leetcode editorial for TC analysis
+*/
+class Solution {
+public:
+    long long dijkstra(char source, char target, vector<vector<pair<int,int>>>&g)
+    {
+        vector<int>dist(26,INT_MAX);
+       
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
+        pq.push({0,source-'a'});
+
+        while(!pq.empty()) {
+            auto u=pq.top();
+            pq.pop();
+
+            for(auto v:g[u.second]) {
+                if(dist[v.first]> v.second+u.first) {
+                    dist[v.first] = v.second+u.first;
+                    pq.push({v.second+u.first, v.first});
+                }
+            }
+            
+        }
+        return dist[target-'a'];
+    }
+    long long minimumCost(string source, string target, vector<char>& o, vector<char>& c, vector<int>& cost) {
+        long long totalCost = 0;
+        int n=o.size();
+        map<pair<char,char>,long long>mp;
+
+        vector<vector<pair<int,int>>>g(26);
+        for(int i=0;i<n;i++) {
+            int u = o[i]-'a';
+            int v = c[i]-'a';
+
+            g[u].push_back({v,cost[i]});
+        }
+        for(int i=0;i<source.length();i++) {
+            if(source[i]!=target[i]) {
+            
+                if(mp.find({source[i],target[i]})==mp.end()) {
+                   int tempcost = dijkstra(source[i],target[i],g);
+                
+                    if(tempcost == INT_MAX) return -1;
+                    else totalCost+=tempcost;
+                    //storing the source[i] to target[i] value when comes first time to avoid calling dijkstra repeatedly for same pair to avoid tle
+                    mp[{source[i],target[i]}] = tempcost;
+                }
+               else totalCost+=mp[{source[i],target[i]}];
+            }
+        }
+        return totalCost;
+    }
+};
